@@ -1,3 +1,4 @@
+#' @import vctrs
 #' @import rlang
 #' @keywords internal
 "_PACKAGE"

@@ -48,6 +48,9 @@ is_call  <-  function(x, name = NULL, n = NULL, ns = NULL) {
 is_character  <-  function(x, n = NULL) {
     .Call(ffi_is_character, x, n, NULL, NULL)
 }
+is_string <- function(x) {
+    is.character(x) && length(x) == 1
+}
 
 is_bare_double  <-  function(x, n = NULL) {
     !is.object(x) && is_double(x, n)
@@ -239,7 +242,7 @@ is_expression  <-  function(x) {
         if (!is_null(attributes(elt))) {
             return(FALSE)
         }
-        switch(typeof(elt), language = stack$push(!!!as.list(elt)), 
+        switch(typeof(elt), language = stack$push(!!!as.list(elt)),
             if (!is_symbol(elt) && !is_syntactic_literal(elt)) {
                 return(FALSE)
             })

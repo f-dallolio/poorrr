@@ -57,3 +57,25 @@ unstructure <- function (x) {
   attributes(x) <- NULL
   x
 }
+
+path_rm_ext <- function(x) {
+  gsub("[.]*[[:alnum:]]*$", "", x)
+}
+path_dir <- function(x) {
+  dirname(x)
+}
+path_file <- function(x, rm_ext = FALSE) {
+  if(rm_ext) {
+    path_rm_ext(basename(x))
+  } else {
+    basename(x)
+  }
+}
+
+is_string <- function(x) {
+  is.character(x) && length(x) == 1
+}
+is_bool <- function (x) {
+  is.logical(x) && length(x) == 1 && !is.na(x)
+}
+
