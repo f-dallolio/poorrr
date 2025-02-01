@@ -43,18 +43,18 @@
 # # x <- gsub(export_pattern, "\\1", x)
 # # gsub("\"", "", x)
 #
-#
-# repo_urls <- function (repo_spec) {
-#   ns_endpoint <- sprintf("/repos/%s/contents/NAMESPACE", repo_spec)
-#   ns_url <- gh::gh(ns_endpoint)$download_url
-#
-#   exports <- as.list(parse(ns_url, keep.source = FALSE))
-#
-#   nms_exports <- as.character(lapply(exports, .subset2, 1))
-#   names(exports) <- nms_exports
-#
-#   id_exports <- nms_exports == "export"
-#   lapply(exports[id_exports], .subset2, 2)
+
+repo_urls <- function (repo_spec) {
+  ns_endpoint <- sprintf("/repos/%s/contents/NAMESPACE", repo_spec)
+  ns_url <- gh::gh(ns_endpoint)$download_url
+
+  exports <- as.list(parse(ns_url, keep.source = FALSE))
+
+  nms_exports <- as.character(lapply(exports, .subset2, 1))
+  names(exports) <- nms_exports
+
+  id_exports <- nms_exports == "export"
+lapply(exports[id_exports], .subset2, 2)
 #
 #
 #

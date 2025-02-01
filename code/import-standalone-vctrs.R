@@ -64,6 +64,46 @@ new_data_frame <- function(.x = list(),
   )
 }
 
+# new_data_frame2 <- function(.x = list(),
+#                            ...,
+#                            .size = NULL,
+#                            .class = NULL,
+#                            .named = TRUE) {
+#
+#   n_cols <- length(.x)
+#   nms <- names(x)
+#   if (n_cols != 0 && is.null(nms)) {
+#     if(.named) {
+#       nms <- rep("", n_cols)
+#     } else {
+#       stop("Columns must be named.", call. = FALSE)
+#     }
+#   }
+#   i_nms <- which(nms == ""| is.na(nms))
+#   if(length(i_nms)) {
+#     nms[i_nms] <- paste("X", i_nms, sep = "_")
+#   }
+#
+#   if (is.null(.size)) {
+#     if (n_cols == 0) {
+#       .size <- 0
+#     } else {
+#       if (is.data.frame(.x)) {
+#         .size <- nrow(.x)
+#       } else {
+#         .size <- length(.x)
+#       }
+#     }
+#   }
+#
+#   structure(
+#     setNames(.x, nms),
+#     class = c(.class, "data.frame"),
+#     row.names = .set_row_names(.size),
+#     ...
+#   )
+# }
+
 df_list <- function(..., .size = NULL) {
   vec_recycle_common(list(...), size = .size)
 }

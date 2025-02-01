@@ -1,81 +1,57 @@
-make_function <- function (args, body, env = parent.frame()) {
-  args <- as.pairlist(args)
-  stopifnot(!is.null(names(args)), all(names(args) != ""), is.language(body))
-  eval(call("function", args, body), env)
-}
+#' Utility functions
 
-make_call <- function (f, ..., .args = list()) {
-  if (is.character(f)) f <- as.name(f)
-  as.call(c(f, ..., .args))
-}
-
-
-as_predicate <- function (.fn, ...) {
-  .fn <- as_function(.fn)
-  function(...) {
-    out <- .fn(...)
-    if (!is_bool(out)) {
-      abort(sprintf("Predicate functions must return a single `TRUE` or `FALSE`, not %s",
-                    as_predicate_friendly_type_of(out)))
+.as_function <- function(x, env = globalenv(), ...) {
+    if (nargs()) {
+        stopifnot(...length() == 0)
     }
-    out
-  }
+    if (is.function(x)) {
+        return(x)
+    }
+    if (inherits(x, "quosure")) {
+        stop("Cannot handle `quosures`. Install and use `rlang::as_function()`.")
+    }
+    if (is.call(x) && deparse(x[[1]]) == "~") {
+        if (length(x) > 2) {
+            stop("Cannot coerce a two-sided formula to a function.")
+        }
+        env <- attr(x, ".Environment")
+        if (!is.environment(env)) {
+            stop("Formula must carry an environment.")
+        }
+        args <- alist(... = , .x = ..1, .y = ..2, . = ..1)
+        fn <- eval(call("function", as.pairlist(args), x[[2]]))
+        environment(fn) <- env
+        fn <- structure(fn, class = c("rlang_lambda_function", "function"))
+        return(fn)
+    }
+    if (is.character(x) && length(x) == 1) {
+        return(get(x, envir = env, mode = "function"))
+    }
+    stop("Cannot coeerce `x` into a function")
 }
 
-
-oxford_comma <- function (x, sep = ", ", final = "or") {
-  n <- length(x)
-  if (n < 2) {
-    return(x)
-  }
-  head <- x[seq_len(n - 1)]
-  last <- x[n]
-  head <- paste(head, collapse = sep)
-  if (n > 2) {
-    paste0(head, sep, final, " ", last)
-  } else {
-    paste0(head, " ", final, " ", last)
-  }
+.set_names <- function(x, nm = x, ...) {
+    n <- length(x)
+    stopifnot(length(nm) %in% c(1, n))
+    if (n == 1) {
+        nm <- rep(nm, n)
+    }
+    names(x) <- nm
+    x
 }
-oxford_comma_and <- function (x) {
-  oxford_comma(x, sep = ", ", final = "and")
-}
-oxford_comma_or <- function (x) {
-  oxford_comma(x, sep = ", ", final = "or")
+paste_line0 <- function (x, .trailing = TRUE) {
+    if (.trailing) {
+        paste0(x, "\n", collapse = "")
+    } else {
+        paste(x, collapse = "\n")
+    }
 }
 
-`list_slice2<-` <- function (x, i, value) {
-  if (is.null(value)) {
-    x[i] <- list(NULL)
-  } else {
-    x[[i]] <- value
-  }
-  x
+paste_line <- function (..., .trailing = TRUE) {
+    text <- as.character(list(...))
+    if (.trailing) {
+        paste0(text, "\n", collapse = "")
+    } else {
+        paste(text, collapse = "\n")
+    }
 }
-
-unstructure <- function (x) {
-  attributes(x) <- NULL
-  x
-}
-
-path_rm_ext <- function(x) {
-  gsub("[.]*[[:alnum:]]*$", "", x)
-}
-path_dir <- function(x) {
-  dirname(x)
-}
-path_file <- function(x, rm_ext = FALSE) {
-  if(rm_ext) {
-    path_rm_ext(basename(x))
-  } else {
-    basename(x)
-  }
-}
-
-is_string <- function(x) {
-  is.character(x) && length(x) == 1
-}
-is_bool <- function (x) {
-  is.logical(x) && length(x) == 1 && !is.na(x)
-}
-
