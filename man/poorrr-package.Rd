@@ -6,7 +6,7 @@
 \alias{poorrr-package}
 \title{poorrr: What the Package Does (One Line, Title Case)}
 \description{
-What the package does (one paragraph).
+A Poor Man's Dependency Free Recreation of 'purrr'.
 }
 \seealso{
 Useful links:
@@ -18,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com}
+\strong{Maintainer}: Filippo Dall'Olio \email{fdallolio@brocku.ca}
 
 }
 \keyword{internal}
