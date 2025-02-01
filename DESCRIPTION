@@ -11,5 +11,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports:
     rlang
-URL: https://github.com/f-dallolio/poorrr
+URL: https://github.com/f-dallolio/poorrr, https://f-dallolio.github.io/poorrr/
 BugReports: https://github.com/f-dallolio/poorrr/issues
