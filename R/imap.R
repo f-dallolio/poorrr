@@ -5,7 +5,7 @@ NULL
 #' @rdname imap
 #' @export
 imap <- function(.x, .f, ...) {
-    map2(.x, names(.x) %||% seq_along(.x), .f, ...)
+  map2(.x, names(.x) %||% seq_along(.x), .f, ...)
 }
 #' @rdname imap
 #' @export

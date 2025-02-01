@@ -5,6 +5,6 @@ NULL
 #' @rdname negate
 #' @export
 negate <- function(.p) {
-    .p <- .as_function(.p, env = globalenv())
-    function(...) !.p(...)
+  .p <- as_function(.p, env = globalenv())
+  function(...) !.p(...)
 }

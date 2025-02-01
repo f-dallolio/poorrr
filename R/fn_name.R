@@ -1,10 +1,10 @@
 #' @export
 fn_name <- function(fn) {
   switch(typeof(fn),
-         "builtin" = ,
-         "special" = .fn_name_primitive(fn),
-         "closure" = .fn_name_closure(fn),
-         stop("argument is not a function")
+    "builtin" = ,
+    "special" = .fn_name_primitive(fn),
+    "closure" = .fn_name_closure(fn),
+    stop("argument is not a function")
   )
 }
 

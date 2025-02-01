@@ -5,10 +5,12 @@ NULL
 #' @rdname pmap
 #' @export
 pmap <- function(.l, .f, ...) {
-    .f <- .as_function(.f)
-    args <- .purrr_args_recycle(.l)
-    do.call("mapply", c(FUN = list(quote(.f)), args, MoreArgs = quote(list(...)),
-        SIMPLIFY = FALSE, USE.NAMES = FALSE))
+  .f <- as_function(.f)
+  args <- .purrr_args_recycle(.l)
+  do.call("mapply", c(
+    FUN = list(quote(.f)), args, MoreArgs = quote(list(...)),
+    SIMPLIFY = FALSE, USE.NAMES = FALSE
+  ))
 }
 #' @rdname pmap
 #' @export
@@ -39,11 +41,15 @@ pmap_chr <- function(.l, .f, ...) {
 }
 
 .purrr_args_recycle <- function(args) {
-    lengths <- map_int(args, length)
-    n <- max(lengths)
-    stopifnot(all(lengths == 1L | lengths == n))
-    to_recycle <- lengths == 1L
-    args[to_recycle] <- map(args[to_recycle], function(x) rep.int(x,
-        n))
-    args
+  lengths <- map_int(args, length)
+  n <- max(lengths)
+  stopifnot(all(lengths == 1L | lengths == n))
+  to_recycle <- lengths == 1L
+  args[to_recycle] <- map(args[to_recycle], function(x) {
+    rep.int(
+      x,
+      n
+    )
+  })
+  args
 }

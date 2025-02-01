@@ -13,7 +13,7 @@ call_name <- function(call) {
 }
 # #' @rdname XXX
 #' @export
-call_ns <- function (call) {
+call_ns <- function(call) {
   stopifnot(is.call(call))
   head <- call[[1]]
   if (is.call(head) && deparse(head[[1]]) %in% c("::", ":::")) {
@@ -24,14 +24,14 @@ call_ns <- function (call) {
 }
 # #' @rdname XXX
 #' @export
-call_args <- function (call) {
+call_args <- function(call) {
   stopifnot(is.call(call))
   as.list(call)[-1]
 }
 
 # #' @rdname XXX
 #' @export
-call_type <- function (x) {
+call_type <- function(x) {
   if (is_call(x, "~")) {
     stopifnot(length(x) == 2)
     x <- x[[2]]

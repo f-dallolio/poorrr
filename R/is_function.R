@@ -26,6 +26,6 @@ is_primitive_lazy <- function(x) {
 }
 # #' @rdname XXX
 #' @export
-is_lambda <- function (x) {
+is_lambda <- function(x) {
   inherits(x, "rlang_lambda_function")
 }

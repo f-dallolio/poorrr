@@ -1,7 +1,7 @@
 # #' @rdname XXX
 #' @export
-is_call <- function (x, name = NULL, n = NULL, ns = NULL) {
-  if(!is.call(x)) {
+is_call <- function(x, name = NULL, n = NULL, ns = NULL) {
+  if (!is.call(x)) {
     return(FALSE)
   }
   if (!is.null(name) && !call_name(x) %in% name) {
@@ -17,12 +17,12 @@ is_call <- function (x, name = NULL, n = NULL, ns = NULL) {
 }
 # #' @rdname XXX
 #' @export
-is_call_simple <- function (x) {
+is_call_simple <- function(x) {
   head <- x[[1]]
   is_call(head, name = c("::", ":::")) || is.symbol(head)
 }
 
-is_namespaced_symbol<- function (x, ns = NULL, private = NULL) {
+is_namespaced_symbol <- function(x, ns = NULL, private = NULL) {
   if (typeof(x) != "language") {
     return(FALSE)
   }
@@ -38,11 +38,11 @@ is_namespaced_symbol<- function (x, ns = NULL, private = NULL) {
     identical(head, quote(`::`))
   }
 }
-is_ns_sym <- function (x, ns = NULL, private = NULL) {
+is_ns_sym <- function(x, ns = NULL, private = NULL) {
   is_namespaced_symbol(x = x, ns = ns, private = private)
 }
 
-is_namespaced_call <- function (x, ns = NULL, private = NULL) {
+is_namespaced_call <- function(x, ns = NULL, private = NULL) {
   if (typeof(x) != "language") {
     return(FALSE)
   }
@@ -51,7 +51,6 @@ is_namespaced_call <- function (x, ns = NULL, private = NULL) {
   }
   TRUE
 }
-is_ns_call <- function (x, ns = NULL, private = NULL) {
+is_ns_call <- function(x, ns = NULL, private = NULL) {
   is_namespaced_call(x = x, ns = ns, private = private)
 }
-

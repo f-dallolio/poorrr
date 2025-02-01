@@ -12,7 +12,7 @@ is_formula <- function(x, lhs = NULL, ...) {
 
 # #' @rdname XXX
 #' @export
-is_bare_formula <- function (x, scoped = TRUE, lhs = NULL) {
+is_bare_formula <- function(x, scoped = TRUE, lhs = NULL) {
   if (!is_formula(x, lhs = lhs)) {
     return(FALSE)
   }
@@ -27,4 +27,3 @@ is_bare_formula <- function (x, scoped = TRUE, lhs = NULL) {
   }
   is_string(class(x), exp_class)
 }
-

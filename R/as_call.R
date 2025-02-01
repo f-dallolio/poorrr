@@ -10,7 +10,7 @@ as.call.default <- function(x) {
 as_call.function <- function(x) {
   stopifnot(typeof(x) == "closure")
   body <- body(x)
-  if(!(is.call(body) && deparse(body[[1]]) == "{")) {
+  if (!(is.call(body) && deparse(body[[1]]) == "{")) {
     body <- call("{", body)
   }
   call("function", as.pairlist(formals(x)), body)
@@ -28,7 +28,7 @@ as_call.character <- function(x) {
 }
 #' @export
 as_call.list <- function(x) {
-  if(is.character(x[[1]])) {
+  if (is.character(x[[1]])) {
     x[[1]] <- tryCatch(str2lang(x[[1]]), error = function(e) as.symbol(x))
   }
   as.call(x)
