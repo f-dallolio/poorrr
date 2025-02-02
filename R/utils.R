@@ -21,7 +21,7 @@ as_function <- function(x, env = globalenv(), ...) {
     args <- alist(... = , .x = ..1, .y = ..2, . = ..1)
     fn <- eval(call("function", as.pairlist(args), x[[2]]))
     environment(fn) <- env
-    fn <- structure(fn, class = c("rlang_lambda_function", "function"))
+    class(fn) <-  c("rlang_lambda_function", "function")
     return(fn)
   }
   if (is.character(x) && length(x) == 1) {
@@ -30,7 +30,7 @@ as_function <- function(x, env = globalenv(), ...) {
   stop("Cannot coeerce `x` into a function")
 }
 
-.set_names <- function(x, nm = x, ...) {
+set_names <- function(x, nm = x, ...) {
   n <- length(x)
   stopifnot(length(nm) %in% c(1, n))
   if (n == 1) {

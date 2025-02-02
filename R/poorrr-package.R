@@ -1,6 +1,3 @@
-# #' @import rlang
-# #' @import vctrs
-# #' @import pillar
 #' @keywords internal
 "_PACKAGE"
 
