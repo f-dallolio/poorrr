@@ -1,5 +1,3 @@
-#' Utility functions
-
 as_function <- function(x, env = globalenv(), ...) {
   if (nargs()) {
     stopifnot(...length() == 0)
