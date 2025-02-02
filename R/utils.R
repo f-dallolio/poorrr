@@ -60,3 +60,17 @@ paste_line <- function(..., .trailing = TRUE) {
 obj_is_list <- function(x) {
   is_bare_list(x) || inherits(x, "list")
 }
+
+`list_slice2<-` <-  function (x, i, value) {
+  if (is.null(value)) {
+    x[i] <- list(NULL)
+  }
+  else {
+    x[[i]] <- value
+  }
+  x
+}
+
+pluck_raw <- function(.x, .index, .default = NULL) {
+  tryCatch(.x[[.index]], error = function(e) .default)
+}

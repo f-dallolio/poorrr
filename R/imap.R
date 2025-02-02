@@ -9,6 +9,12 @@ imap <- function(.x, .f, ...) {
 }
 #' @rdname imap
 #' @export
+iwalk <- function(.x, .f, ...) {
+  imap(.x = .x, .f = .f, ...)
+  invisible(.x)
+}
+#' @rdname imap
+#' @export
 imap_lgl <- function(.x, .f, ...) {
   as.vector(imap(.x, .f, ...), "logical")
 }

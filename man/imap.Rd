@@ -2,6 +2,7 @@
 % Please edit documentation in R/imap.R
 \name{imap}
 \alias{imap}
+\alias{iwalk}
 \alias{imap_lgl}
 \alias{imap_int}
 \alias{imap_dbl}
@@ -9,6 +10,8 @@
 \title{Apply a function to each element of a vector, and its index}
 \usage{
 imap(.x, .f, ...)
+
+iwalk(.x, .f, ...)
 
 imap_lgl(.x, .f, ...)
 
