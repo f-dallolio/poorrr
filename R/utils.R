@@ -32,6 +32,9 @@ as_function <- function(x, env = globalenv(), ...) {
 
 set_names <- function(x, nm = x, ...) {
   n <- length(x)
+  if (is.null(nm)) {
+    return(unname(x))
+  }
   stopifnot(length(nm) %in% c(1, n))
   if (n == 1) {
     nm <- rep(nm, n)
@@ -54,4 +57,8 @@ paste_line <- function(..., .trailing = TRUE) {
   } else {
     paste(text, collapse = "\n")
   }
+}
+
+obj_is_list <- function(x) {
+  is_bare_list(x) || inherits(x, "list")
 }
