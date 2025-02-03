@@ -19,7 +19,10 @@ is_call <- function(x, name = NULL, n = NULL, ns = NULL) {
 #' @export
 is_call_simple <- function(x) {
   head <- x[[1]]
-  is_call(head, name = c("::", ":::")) || is.symbol(head)
+  if (is.symbol(head)) {
+    return(TRUE)
+  }
+  is.call(head) && deparse(head) %in% c("::", ":::")
 }
 
 is_namespaced_symbol <- function(x, ns = NULL, private = NULL) {
@@ -54,3 +57,4 @@ is_namespaced_call <- function(x, ns = NULL, private = NULL) {
 is_ns_call <- function(x, ns = NULL, private = NULL) {
   is_namespaced_call(x = x, ns = ns, private = private)
 }
+

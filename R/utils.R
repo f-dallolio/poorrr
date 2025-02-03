@@ -28,6 +28,40 @@ as_function <- function(x, env = globalenv(), ...) {
   stop("Cannot coeerce `x` into a function")
 }
 
+
+as_predicate <- function (.fn, ..., .allow_na = FALSE) {
+  .fn <- as_function(.fn)
+  function(...) {
+    out <- .fn(...)
+    if (!is_bool(out)) {
+      if (is_na(out) && .allow_na) {
+        return(NA)
+      }
+      stop("A predicate function must return a single `TRUE` or `FALSE`.")
+    }
+    out
+  }
+}
+
+
+recycle <- function(x, n) {
+  if (is.null(x) || is.null(n)) {
+    return(NULL)
+  }
+  n_x <- length(x)
+  if (n_x == n) {
+    return(x)
+  }
+  if (n == 0L) {
+    return(rep(x, 0))
+  }
+  if (n_x == 1L) {
+    rep(x, n)
+  } else {
+    stop("Incompatible lengths: ", n_x, ", ", size, call. = FALSE)
+  }
+}
+
 set_names <- function(x, nm = x, ...) {
   n <- length(x)
   if (is.null(nm)) {
@@ -70,7 +104,21 @@ obj_is_list <- function(x) {
   }
   x
 }
-
-pluck_raw <- function(.x, .index, .default = NULL) {
-  tryCatch(.x[[.index]], error = function(e) .default)
+list_set_slice2 <- function(x, i, value) {
+  if (is.null(value)) {
+    x[i] <- list(NULL)
+  } else {
+    x[[i]] <- value
+  }
+  x
 }
+
+
+list_set_slice2(as.list(letters), 2, NULL)
+
+x <- as.list(letters)
+x[[2]] <- NULL
+x
+x <- mtcars
+row.names(x) <- NULL
+x
