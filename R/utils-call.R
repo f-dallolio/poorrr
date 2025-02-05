@@ -76,15 +76,15 @@ call_type2 <- function(x) {
 }
 
 #' @export
-as_call <- function(x) {
+as_call <- function(x, ...) {
   UseMethod("as_call")
 }
 #' @export
-as_call.default <- function(x) {
+as_call.default <- function(x, ...) {
   as.call(x)
 }
 #' @export
-as_call.function <- function(x) {
+as_call.function <- function(x, ...) {
   stopifnot(typeof(x) == "closure")
   body <- body(x)
   if (!(is.call(body) && deparse(body[[1]]) == "{")) {
@@ -93,22 +93,30 @@ as_call.function <- function(x) {
   call("function", as.pairlist(formals(x)), body)
 }
 #' @export
-as_call.name <- function(x) {
+as_call.name <- function(x, ...) {
   as.call(list(x))
 }
 #' @export
-as_call.character <- function(x) {
+as_call.character <- function(x, ...) {
   if (length(x) == 1) {
     return(call(x))
   }
   stop("Input must be a string.")
 }
 #' @export
-as_call.list <- function(x) {
-  if (is.character(x[[1]])) {
-    x[[1]] <- tryCatch(str2lang(x[[1]]), error = function(e) as.symbol(x))
+as_call.list <- function(x, ..., .head= NULL) {
+  if (is.null(.head)) {
+    .head <- x[[1]]
+    x <- as.list(x)[-1]
   }
-  as.call(x)
+  if (is_string(.head)) {
+    if(grepl(":{2,3}", .head)) {
+      .head <- str2lang(.head)
+    } else {
+      .head <- as.symbol(.head)
+    }
+  }
+  as.call(c(.head, x))
 }
 #' @export
 as_call.pairlist <- function(x) {
@@ -131,7 +139,7 @@ new_call <- function(car, cdr = NULL) {
   as.call(c(out, as.pairlist(cdr)))
 }
 
-"base::"
+new_formula <- function(..., lhs, rhs)
 
 # call_prep <- function(x) {
 #   if (is.character(x)) {

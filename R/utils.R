@@ -95,15 +95,88 @@ obj_is_list <- function(x) {
   is_bare_list(x) || inherits(x, "list")
 }
 
-`list_slice2<-` <-  function (x, i, value) {
-  if (is.null(value)) {
-    x[i] <- list(NULL)
+obj_is_vector <- function(x) {
+  if (exists("vec_proxy", mode = "function")) {
+    x <- vec_proxy(x)
+    if (typeof(x) == "list") {
+      return(TRUE)
+    }
+    return(obj_as_vector(x))
   }
-  else {
-    x[[i]] <- value
-  }
-  x
+  is_atomic(x) || obj_is_list(x) || is.data.frame(x)
 }
+list_all_vectors <- function(x) {
+  all(vapply(x, obj_is_vector, logical(1)))
+}
+
+vec_size <- function(x) {
+  if (is.data.frame(x)) {
+    nrow(x)
+  } else {
+    length(x)
+  }
+}
+list_sizes <- function(x, size = NULL) {
+  stopifnot(obj_is_list(x))
+  vapply(x, vec_size, integer(1))
+}
+list_all_size <- function(x, size, ..., .scalar_only = FALSE) {
+  if (.scalar_only) {
+    all(list_sizes(x) == as.integer(size))
+  } else {
+    all(list_sizes(x) %in% as.integer(size))
+  }
+}
+
+
+is_mold <- function(type) {
+  modes <- c("numeric", "logical", "integer", "double", "complex",
+             "character", "raw")
+  length(type) > 1 || (!type %in% modes)
+}
+
+is_mold("")
+
+
+
+is_method_registered <- function (generic, class, env = parent.frame()) {
+  fn <- get0(generic, envir = env)
+  if (is.null(fn)) {
+    return(FALSE)
+  }
+  tbl <- asNamespace(topenv(fn))$.__S3MethodsTable__.
+  for (c in class) {
+    name <- paste0(generic, ".", c)
+    if (exists(name, envir = tbl, inherits = FALSE)) {
+      return(TRUE)
+    }
+    if (exists(name, envir = globalenv(), inherits = FALSE)) {
+      return(TRUE)
+    }
+  }
+  FALSE
+}
+
+typeof(lm(mpg ~ ., mtcars))
+is_method_registered("vec_proxy", "POSIXlt")
+vctrs:::vec_proxy.POSIXlt
+
+
+can_simplify <- function(x, type = NULL) {
+  is_atomic <- vapply(x, is.atomic, logical(1))
+  if (!all(is_atomic)) return(FALSE)
+  mode <- unique(vapply(x, typeof, character(1)))
+  if (length(mode) > 1 && !all(c("double", "integer") %in% mode)) {
+    return(FALSE)
+  }
+
+  # This can be coerced safely. If type is supplied, perform
+  # additional check
+  is.null(type) || can_coerce(x, type)
+}
+
+
+
 list_set_slice2 <- function(x, i, value) {
   if (is.null(value)) {
     x[i] <- list(NULL)
@@ -113,12 +186,118 @@ list_set_slice2 <- function(x, i, value) {
   x
 }
 
+as_missing <- function(x) {
+  if (is.data.frame(x)) {
+    return(rep(NA, nrow(x)))
+  }
+  unlist(x[NA_integer_])
+}
 
-list_set_slice2(as.list(letters), 2, NULL)
 
-x <- as.list(letters)
-x[[2]] <- NULL
-x
-x <- mtcars
-row.names(x) <- NULL
-x
+as_ith_location <- function (i, n, default = 0L) {
+  if (is.character(n)) {
+    names <- n
+    n <- length(n)
+  } else if (length(n) > 1) {
+    n <- max(n)
+  }
+
+  ni <- length(i)
+  if (is.logical(i)) {
+    stopifnot(ni == as.integer(n))
+    i <- which(i)[[1]]
+    ni <- length(i)
+  } else if (is.character(i)) {
+    if (is.null(names)) {
+      return(default)
+    }
+    stopifnot(ni == 1)
+    i <- match(i, names, nomatch = 0)[[1]]
+  } else if (is.numeric(i)) {
+    stopifnot(ni == 1)
+    i <- as.integer(i)
+  }
+  if (i > 0L && i <= n) {
+    return(i)
+  }
+  if (i >= -n && i < 0L) {
+    return(n + i + 1L)
+  }
+  default
+}
+
+
+pluck_i <- function(x, i, .default = NULL) {
+  stopifnot(is_scalar_numeric(i) || is_string(i))
+  if (is.character(i)) {
+    if (i %in% names(x)) {
+      return(x[[i]])
+    }
+    return(.default)
+  }
+  i <- as.integer(i)
+  n <- length(x)
+  if (i == 0 || i > n || i < -n) {
+    return(.default)
+  }
+  if (i < 0) {
+    i <- n + i + 1
+  }
+  x[[i]]
+}
+pluck_raw <- function(x, i, .default = NULL) {
+  x <- pluck_i(x, c(i)[[1]], .default)
+  if (length(i) == 1) {
+    return(x)
+  }
+  pluck_raw(x, i[-1], .default)
+}
+pluck <- function(x, ..., .default = NULL) {
+  pluck_raw(x, list(...), .default)
+}
+
+new_box <- function (.x, class = NULL, ...) {
+  structure(list(.x), class = c(class, "rlang_box"), ...)
+}
+is_box <- function (x, class = NULL) {
+  if(!inherits(x, "rlang_box")) {
+    return(FALSE)
+  }
+  if (is.null(class)) {
+    return(TRUE)
+  }
+  inherits(x, class)
+}
+as_box <- function (x, class = NULL) {
+  if (is_box(x, class)) {
+    x
+  } else {
+    new_box(x, class)
+  }
+}
+
+iff <- \(x) {
+  if (is.call(x) || is.symbol(x)) {
+    if(is_call(x, "!") || is_call(x[[2]], "!") || is_call(x[[2]][[2]], "!")){
+      out <- eval(x[[c(2,2,2)]])
+    } else {
+      out <- list(eval(x))
+    }
+    return(do.call(c, lapply(out, iff)))
+  }
+  if(inherits(x, "rlang_box_splice")) {
+      return(x[[1]])
+  }
+  return(list(x))
+
+}
+
+
+ff <- function(...) {
+  x <- do.call(c, lapply(eval(substitute(alist(...))), iff))
+  vapply()
+}
+
+
+iff(x <- quote(!!!list(!!!mtcars, mtcars$mpg)))
+
