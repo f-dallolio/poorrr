@@ -1,3 +1,40 @@
+str_flatten_comma <- function(string,
+                              last = "and",
+                              na.rm = FALSE,
+                              oxford = TRUE) {
+  collapse <- ", "
+  if (oxford) {
+    last <- paste0(", ", gsub("^\\s*[,]", "", last))
+    if(!grepl("\\s$", last)) {
+      last <- paste0(last, " ")
+    }
+  }
+  str_flatten(string, collapse, last, na.rm)
+}
+
+str_flatten <- function (string,
+                         collapse = "",
+                         last = NULL,
+                         na.rm = FALSE) {
+  if (na.rm) {
+    string <- string[!is.na(string)]
+  }
+  n <- length(string)
+  if (n == 1) {
+    return(string)
+  }
+  if (is.null(last)) {
+    last <- collapse
+  }
+  if (n == 2) {
+    paste0(string, collapse = last)
+  } else {
+    string_1 <- paste0(string[-n], collapse = collapse)
+    paste(string_1, string[n], sep = last)
+  }
+}
+
+
 as_function <- function(x, env = globalenv(), ...) {
   if (nargs()) {
     stopifnot(...length() == 0)
@@ -275,29 +312,3 @@ as_box <- function (x, class = NULL) {
     new_box(x, class)
   }
 }
-
-iff <- \(x) {
-  if (is.call(x) || is.symbol(x)) {
-    if(is_call(x, "!") || is_call(x[[2]], "!") || is_call(x[[2]][[2]], "!")){
-      out <- eval(x[[c(2,2,2)]])
-    } else {
-      out <- list(eval(x))
-    }
-    return(do.call(c, lapply(out, iff)))
-  }
-  if(inherits(x, "rlang_box_splice")) {
-      return(x[[1]])
-  }
-  return(list(x))
-
-}
-
-
-ff <- function(...) {
-  x <- do.call(c, lapply(eval(substitute(alist(...))), iff))
-  vapply()
-}
-
-
-iff(x <- quote(!!!list(!!!mtcars, mtcars$mpg)))
-

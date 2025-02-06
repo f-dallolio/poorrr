@@ -10,7 +10,6 @@
 \alias{ns_exports}
 \alias{ns_privates}
 \alias{ns_names}
-\alias{ns_names_if}
 \alias{ns_exports_has}
 \title{Get the namespace of a package}
 \usage{
@@ -29,8 +28,6 @@ ns_exports(ns, sort = TRUE)
 ns_privates(ns, sort = TRUE)
 
 ns_names(ns, sort = TRUE)
-
-ns_names_if(ns, .p = NULL, ..., sort = TRUE)
 
 ns_exports_has(ns, name)
 }
