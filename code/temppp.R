@@ -276,3 +276,77 @@ swe(x)
 x <- quote(
   a <- function(x, env = rlang::caller_env()){rlang::eval_tidy(x, env)}
 )
+
+
+
+x <- as.POSIXlt(1:10)
+
+
+is.data.frame(x)
+mtcars |>  obj_is_vector()
+maybe_rcrd <- function (x) {
+
+}
+
+names(x) <- letters[1:10]
+names(x) |>  identical(names(unclass(x)))
+
+same_col_len <- list_all_size(x0, lengths(x0)[[1]])
+same_len <- lengths(x0)[[1]] == length(x)
+names(x0) != NULL
+
+
+as.data.frame(x0) |> setNames(c("a", letters[1:length(x0)-1]))
+names(2)
+
+
+
+
+
+x <- mtcars
+x[2,1] <- NA
+detect_incomplete_rows(x)
+
+
+
+
+
+
+ith(mtcars, 100)
+
+i <- "c"
+.subset2(setNames(letters, LETTERS), NA)
+
+x <- as.list(setNames(letters, LETTERS))
+.subset2(x, NA)
+ith.default <- function(x,...) {
+  UseMethod("ith")
+}
+
+  switch(typeof(i),
+         integer = ,
+         numeric = .num_as_pos2(i, length(x)))
+
+
+}
+
+letters[NA_integer_]
+
+.num_as_pos2(2, c("c", "c"), default = NA)
+
+
+as_pos <- function (i, n, nms = NULL, default = 0L) {
+
+  if (is.character(n)) {
+    names <- n
+    n <- length(n)
+  } else if (is.numeric(n)) {
+    if (length(n) > 1)
+  }
+
+  if (is.logical(i)) {
+    stopifnot(length == as.integer(n))
+    i <- which(i)[[1]]
+    ni <- length(i)
+  }
+}

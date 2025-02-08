@@ -1,25 +1,23 @@
-#' Simplify a list to an atomic or S3 vector
-#' @export
-list_simplify <- function (x, ..., strict = TRUE) {
-  stopifnot(...length() == 0)
-  stopifnot(is_bool(strict))
+list_simplify <- function(x,
+                          strict = TRUE,
+                          ptype = NULL,
+                          error_arg = caller_arg(x),
+                          error_call = caller_env()) {
+  obj_check_list(x, arg = error_arg, call = error_call)
+
   if (strict) {
-    stopifnot(all(vapply(x, is.vector, logical(1))))
-    stopifnot(all(lengths(x) == 1))
+    list_check_all_vectors(x, arg = error_arg, call = error_call)
+    list_check_all_size(x, 1, arg = error_arg, call = error_call)
   } else {
-    can_simplify <- all(vapply(x, is.vector, logical(1))) && all(lengths(x) == 1)
+    can_simplify <- list_all_vectors(x) && list_all_size(x, 1)
     if (!can_simplify) {
       return(x)
     }
   }
-  names <- names(x)
-  x <- set_names(x, NULL)
-  out <- do.call(c, x)
-  names(out) <- names
-  out
+
+  names <- vec_names(x)
+  x <- vec_set_names(x, NULL)
+
+  out <- do.call("c", x)
+  vec_set_names(out, names)
 }
-
-
-
-
-

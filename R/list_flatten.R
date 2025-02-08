@@ -1,12 +1,45 @@
-#' Flatten a list
-#' @export
-list_flatten <- function (x, ... ){
-  #name_spec = "{outer}_{inner}",
-  #name_repair = c("minimal", "unique", "check_unique", "universal")) {
-  stopifnot(obj_is_list(x))
+list_flatten <- function (x,
+                          ...,
+                          name_spec = "{outer}_{inner}",
+                          name_repair = c("minimal", "unique", "check_unique", "universal")){
+  obj_check_list(x)
   stopifnot(...length() == 0)
-  i <- vapply(x, obj_is_list, logical(1))
-  x[i] <- lapply(x[i],unclass)
-  x[!i] <- lapply(x[!i],list)
-  unlist(x, recursive = FALSE)
+  stopifnot(is_string(name_spec))
+
+  x <- tryCatch(vec_proxy(x), error = function(e) x)
+
+  x <- map_if(x, obj_is_list, unclass, .else = list)
+  if (!is.null(name_spec) && !is.na(name_spec) && name_spec != "") {
+    x <- imap(x, as_name_spec, name_spec, match.arg(name_repair))
+  }
+
+  do.call("c", x)
+}
+
+flatten_spliced <- function (.x){
+  .x <- map_if(.x, is_spliced, .subset2, 1)
+  list_flatten(.x, name_spec = "{inner}")
+}
+
+as_name_spec <- function(x,
+                         outer = NULL,
+                         name_spec = "{outer}_{inner}",
+                         name_repair = c("minimal", "unique", "check_unique", "universal")) {
+  # vec_as_names(inner, match.arg(name_repair))
+  if(is.null(outer) ||
+     !grepl("\\{outer}", name_spec) ||
+     is.na(outer) ||
+     outer == "") {
+    return(x)
+  }
+
+  name_spec <- gsub("{outer}", outer, name_spec, fixed = TRUE)
+  name_spec <- gsub("{inner}", "%s", name_spec, fixed = TRUE)
+
+  inner <- names2(x)
+  i <- inner == ""
+  inner[i] <- outer
+  inner[!i] <- sprintf(name_spec, inner)
+  names2(x) <- vec_as_names(inner, match.arg(name_repair))
+  x
 }
