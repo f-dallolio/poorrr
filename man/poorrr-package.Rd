@@ -6,7 +6,7 @@
 \alias{poorrr-package}
 \title{poorrr: What the Package Does (One Line, Title Case)}
 \description{
-A Poor Man's Dependency Free Recreation of 'purrr'.
+A poor man's dependency-free recreation of package 'purrr'.
 }
 \seealso{
 Useful links:

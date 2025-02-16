@@ -3,7 +3,7 @@ Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
     person("Filippo", "Dall'Olio", , "fdallolio@brocku.ca", role = c("aut", "cre"))
-Description: A Poor Man's Dependency Free Recreation of 'purrr'.
+Description: A poor man's dependency-free recreation of package 'purrr'.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
