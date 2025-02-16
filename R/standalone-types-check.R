@@ -1,61 +1,3 @@
-# ---
-# repo: r-lib/rlang
-# file: standalone-types-check.R
-# last-updated: 2023-03-13
-# license: https://unlicense.org
-# dependencies: standalone-obj-type.R
-# imports: rlang (>= 1.1.0)
-# ---
-#
-# ## Changelog
-#
-# 2024-08-15:
-# - `check_character()` gains an `allow_na` argument (@martaalcalde, #1724)
-#
-# 2023-03-13:
-# - Improved error messages of number checkers (@teunbrand)
-# - Added `allow_infinite` argument to `check_number_whole()` (@mgirlich).
-# - Added `check_data_frame()` (@mgirlich).
-#
-# 2023-03-07:
-# - Added dependency on rlang (>= 1.1.0).
-#
-# 2023-02-15:
-# - Added `check_logical()`.
-#
-# - `check_bool()`, `check_number_whole()`, and
-#   `check_number_decimal()` are now implemented in C.
-#
-# - For efficiency, `check_number_whole()` and
-#   `check_number_decimal()` now take a `NULL` default for `min` and
-#   `max`. This makes it possible to bypass unnecessary type-checking
-#   and comparisons in the default case of no bounds checks.
-#
-# 2022-10-07:
-# - `check_number_whole()` and `_decimal()` no longer treat
-#   non-numeric types such as factors or dates as numbers.  Numeric
-#   types are detected with `is.numeric()`.
-#
-# 2022-10-04:
-# - Added `check_name()` that forbids the empty string.
-#   `check_string()` allows the empty string by default.
-#
-# 2022-09-28:
-# - Removed `what` arguments.
-# - Added `allow_na` and `allow_null` arguments.
-# - Added `allow_decimal` and `allow_infinite` arguments.
-# - Improved errors with absent arguments.
-#
-#
-# 2022-09-16:
-# - Unprefixed usage of rlang functions with `rlang::` to
-#   avoid onLoad issues when called from rlang (#1482).
-#
-# 2022-08-11:
-# - Added changelog.
-#
-# nocov start
-
 # Scalars -----------------------------------------------------------------
 
 .standalone_types_check_dot_call <- .Call
@@ -468,7 +410,6 @@ check_character <- function(x,
                             allow_null = FALSE,
                             arg = caller_arg(x),
                             call = caller_env()) {
-
   if (!missing(x)) {
     if (is_character(x)) {
       if (!allow_na && any(is.na(x))) {
@@ -516,6 +457,29 @@ check_logical <- function(x,
     "a logical vector",
     ...,
     allow_na = FALSE,
+    allow_null = allow_null,
+    arg = arg,
+    call = call
+  )
+}
+
+check_list <- function(x,
+                       ...,
+                       allow_null = FALSE,
+                       call = caller_env(),
+                       arg = caller_arg(x)) {
+  if (!missing(x)) {
+    if (is.list(x)) {
+      return(invisible(NULL))
+    }
+    if (allow_null && is_null(x)) {
+      return(invisible(NULL))
+    }
+  }
+  stop_input_type(
+    x,
+    "a list",
+    ...,
     allow_null = allow_null,
     arg = arg,
     call = call
@@ -596,5 +560,3 @@ list_check_all_size <- function(x, size, ..., allow_null = FALSE, arg = caller_a
   stopifnot(list_all_size(x, size))
   invisible(NULL)
 }
-
-# nocov end
