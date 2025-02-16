@@ -1,4 +1,4 @@
-#' Base replacement for string manipulation based on `stringr`.
+#' Base replacement for string manipulation based on \href{https://stringr.tidyverse.org/}{stringr}.
 #' @name utils-string
 NULL
 

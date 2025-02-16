@@ -19,7 +19,7 @@
 \alias{str_split}
 \alias{str_split_fixed}
 \alias{str_split_1}
-\title{Base replacement for string manipulation based on \code{stringr}.}
+\title{Base replacement for string manipulation based on \href{https://stringr.tidyverse.org/}{stringr}.}
 \usage{
 str_flatten_comma(string, last = "and", na.rm = FALSE, oxford = TRUE)
 
@@ -117,5 +117,5 @@ str_split_fixed(string, pattern, n = Inf)
 str_split_1(string, pattern)
 }
 \description{
-Base replacement for string manipulation based on \code{stringr}.
+Base replacement for string manipulation based on \href{https://stringr.tidyverse.org/}{stringr}.
 }

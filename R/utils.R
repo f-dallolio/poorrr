@@ -23,60 +23,61 @@ as_predicate <- function(.fn, ...) {
     out
   }
 }
-as_closure <- function(fn) {
-  stopifnot(is.function(fn))
-  if (typeof(fn) == "closure") {
-    return(fn)
-  }
-  env <- environment(fn)
-  fname <- fn_name(fn)
-  n <- length(fname)
-  name <- deparse(as.list(fname)[[n]])
-  out <- args(fn)
-  if (is.null(out)) {
-    syms <- switch(name,
-      "$" = alist(x = x, name = name),
-      "(" = alist(x = x),
-      ":" = alist(x = x, y = y),
-      "=" = alist(x = x, y = y),
-      "@" = alist(x = x, name = name),
-      "[" = alist(x = x, i = i),
-      "{" = alist(x = x),
-      "~" = alist(x = x, y = y),
-      "&&" = alist(x = x, y = y),
-      "<-" = alist(name = name, value = value),
-      "[[" = alist(x = x, i = i),
-      "||" = alist(x = x, y = y),
-      "[[<-" = alist(x = x, i = i, value = value),
-      "$<-" = alist(x = x, name = name, value = value),
-      "<<-" = alist(name = name, value = value),
-      "@<-" = alist(x = x, name = name, value = value),
-      "[<-" = alist(x = x, i = i, value = value),
-      NULL
-    )
-    fmls <- rep(list(quote(expr = )), length(syms))
-    names(fmls) <- names(syms)
-    out <- as.function(
-      c(
-        fmls,
-        call("{", as.call(c(as.symbol(name), unname(syms))))
-      ),
-      envir = topenv()
-    )
-    return(out)
-  }
-  nms <- names(formals(out))
-  fmls <- lapply(nms, as.symbol)
-  if (grepl("[^[:alnum:]._]", name)) {
-    body_call <- as.call(c(as.symbol(name), fmls))
-    body(out) <- call("{", body_call)
-  } else {
-    nms[nms == "..."] <- ""
-    names(fmls) <- nms
-    body(out) <- call("{", as.call(c(fname, fmls)))
-  }
-  out
-}
+# as_closure <- function(fn) {
+#   stopifnot(is.function(fn))
+#   if (typeof(fn) == "closure") {
+#     return(fn)
+#   }
+#   env <- environment(fn)
+#   fname <- fn_name(fn)
+#   n <- length(fname)
+#   name <- deparse(as.list(fname)[[n]])
+#   out <- args(fn)
+#   if (is.null(out)) {
+#     syms <- switch(name,
+#                    "$" = function(x, name) eval(call("$", substitute(x), substitute(name))),
+#       # "$" = alist(x = x, name = name),
+#       "(" = alist(x = x),
+#       ":" = alist(x = x, y = y),
+#       "=" = alist(x = x, y = y),
+#       "@" = alist(x = x, name = name),
+#       "[" = alist(x = , i = , j = , ... = , drop = TRUE),
+#       "{" = alist(x = x),
+#       "~" = alist(x = x, y = y),
+#       "&&" = alist(x = x, y = y),
+#       "<-" = alist(name = name, value = value),
+#       "[[" = alist(x = x, i = i),
+#       "||" = alist(x = x, y = y),
+#       "[[<-" = alist(x = x, i = i, value = value),
+#       "$<-" = alist(x = x, name = name, value = value),
+#       "<<-" = alist(name = name, value = value),
+#       "@<-" = alist(x = x, name = name, value = value),
+#       "[<-" = alist(x = x, i = i, value = value),
+#       NULL
+#     )
+#     fmls <- rep(list(quote(expr = )), length(syms))
+#     names(fmls) <- names(syms)
+#     out <- as.function(
+#       c(
+#         fmls,
+#         call("{", as.call(c(as.symbol(name), unname(syms))))
+#       ),
+#       envir = topenv()
+#     )
+#     return(out)
+#   }
+#   nms <- names(formals(out))
+#   fmls <- lapply(nms, as.symbol)
+#   if (grepl("[^[:alnum:]._]", name)) {
+#     body_call <- as.call(c(as.symbol(name), fmls))
+#     body(out) <- call("{", body_call)
+#   } else {
+#     nms[nms == "..."] <- ""
+#     names(fmls) <- nms
+#     body(out) <- call("{", as.call(c(fname, fmls)))
+#   }
+#   out
+# }
 fn_name <- function(fn, ..., no_ns = FALSE, str_out = FALSE) {
   env <- environment(fn)
   if (is.null(env)) {
