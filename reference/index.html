@@ -31,9 +31,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="map-family">Map family<a class="anchor" aria-label="anchor" href="#map-family"></a></h2>
 
-
+      <div class="section-desc"><p>The <code>map(.x, .f)</code> functions transforms each element of the vector <code>.x</code> with the function <code>.f</code>, returning a vector defined by the suffix (<code>_lgl</code>, <code>_chr()</code> etc). <code><a href="../reference/map.html">walk()</a></code> is a variant for functions called primarily for their side-effects; it returns <code>.x</code> invisibly.</p><p>As well as functions, <code>.f</code>, can take numbers and characters (used as a shorthand for <code>[[</code>), and formulas (used as a succint function definition). See details in <code><a href="../reference/as_mapper.html">as_mapper()</a></code></p></div>
 
 
     </div><div class="section level2">
@@ -43,17 +43,69 @@
 
       <dl><dt>
 
-          <code><a href="accumulate.html">accumulate()</a></code> <code><a href="accumulate.html">accumulate_right()</a></code>
+          <code><a href="map.html">map()</a></code> <code><a href="map.html">walk()</a></code> <code><a href="map.html">map_lgl()</a></code> <code><a href="map.html">map_int()</a></code> <code><a href="map.html">map_dbl()</a></code> <code><a href="map.html">map_chr()</a></code> <code><a href="map.html">map_vec()</a></code>
 
         </dt>
-        <dd>Accumulate intermediate results of a vector reduction</dd>
+        <dd>Apply a function to each element of a vector</dd>
       </dl><dl><dt>
 
           <code><a href="as_mapper.html">as_mapper()</a></code>
 
         </dt>
         <dd>Convert an object into a mapper function</dd>
+      </dl></div><div class="section level2">
+      <h2 id="map-variants">Map variants<a class="anchor" aria-label="anchor" href="#map-variants"></a></h2>
+
+      <div class="section-desc"><p>A rich set of variants builds on the basic idea of <code><a href="../reference/map.html">map()</a></code>: <code>modify()</code> modifies “in place”, returning a vector the same type as <code>.x</code>; <code><a href="../reference/map2.html">map2()</a></code> iterates over two vectors in parallel; <code><a href="../reference/pmap.html">pmap()</a></code> (parallel map) iterates over a list of vectors; <code><a href="../reference/map2.html">imap()</a></code> (index map) is a shortcut for the common pattern <code>map2(x, names(x))</code>.</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="map_if.html">map_if()</a></code> <code><a href="map_if.html">map_at()</a></code>
+
+        </dt>
+        <dd>Apply a function to each element of a vector conditionally</dd>
       </dl><dl><dt>
+
+          <code><a href="map_depth.html">map_depth()</a></code> <code><a href="map_depth.html">modify_depth()</a></code>
+
+        </dt>
+        <dd>Map/modify elements at given depth</dd>
+      </dl><dl><dt>
+
+          <code><a href="map2.html">map2()</a></code> <code><a href="map2.html">walk2()</a></code> <code><a href="map2.html">map2_lgl()</a></code> <code><a href="map2.html">map2_int()</a></code> <code><a href="map2.html">map2_dbl()</a></code> <code><a href="map2.html">map2_chr()</a></code> <code><a href="map2.html">map2_vec()</a></code> <code><a href="map2.html">imap()</a></code>
+
+        </dt>
+        <dd>Map over two inputs</dd>
+      </dl><dl><dt>
+
+          <code><a href="pmap.html">pmap()</a></code> <code><a href="pmap.html">pwalk()</a></code> <code><a href="pmap.html">pmap_lgl()</a></code> <code><a href="pmap.html">pmap_int()</a></code> <code><a href="pmap.html">pmap_dbl()</a></code> <code><a href="pmap.html">pmap_chr()</a></code> <code><a href="pmap.html">pmap_vec()</a></code>
+
+        </dt>
+        <dd>Map over multiple input simultaneously (in "parallel")</dd>
+      </dl><dl><dt>
+
+          <code><a href="lmap.html">lmap()</a></code> <code><a href="lmap.html">lmap_if()</a></code> <code><a href="lmap.html">lmap_at()</a></code>
+
+        </dt>
+        <dd>Apply a function to list-elements of a list</dd>
+      </dl></div><div class="section level2">
+      <h2 id="predicate-functionals">Predicate functionals<a class="anchor" aria-label="anchor" href="#predicate-functionals"></a></h2>
+
+      <div class="section-desc"><p>A predicate function is a function that either returns <code>TRUE</code> or <code>FALSE</code>. The predicate functionals take a vector and a predicate function and do something useful.</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="detect.html">detect()</a></code> <code><a href="detect.html">detect_index()</a></code>
 
@@ -65,12 +117,6 @@
 
         </dt>
         <dd>Do every, some, or none of the elements of a list satisfy a predicate?</dd>
-      </dl><dl><dt>
-
-          <code><a href="flatten_list.html">list_flatten()</a></code>
-
-        </dt>
-        <dd>Flatten a list</dd>
       </dl><dl><dt>
 
           <code><a href="has_element.html">has_element()</a></code>
@@ -95,18 +141,70 @@
 
         </dt>
         <dd>Keep/discard elements based on their name/position</dd>
-      </dl><dl><dt>
+      </dl></div><div class="section level2">
+      <h2 id="plucking">Plucking<a class="anchor" aria-label="anchor" href="#plucking"></a></h2>
 
-          <code><a href="list_assign.html">list_assign()</a></code> <code><a href="list_assign.html">list_modify()</a></code> <code><a href="list_assign.html">list_merge()</a></code>
+      <div class="section-desc"><p>Getting or setting a single element.</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="pluck.html">`pluck&lt;-`()</a></code> <code><a href="pluck.html">pluck()</a></code> <code><a href="pluck.html">pluck_exists()</a></code> <code><a href="pluck.html">pluck_depth()</a></code> <code><a href="pluck.html">ith()</a></code> <code><a href="pluck.html">ith_index()</a></code>
 
         </dt>
-        <dd>Modify a list</dd>
+        <dd>Safely get or set an element deep within a nested data structure</dd>
+      </dl><dl><dt>
+
+          <code><a href="modify_in.html">modify_in()</a></code> <code><a href="modify_in.html">assign_in()</a></code>
+
+        </dt>
+        <dd>Modify a pluck location</dd>
+      </dl></div><div class="section level2">
+      <h2 id="other-vector-transforms">Other vector transforms<a class="anchor" aria-label="anchor" href="#other-vector-transforms"></a></h2>
+
+      <div class="section-desc"><p>A grab bag of useful tools for manipulating vectors.</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="accumulate.html">accumulate()</a></code> <code><a href="accumulate.html">accumulate_right()</a></code>
+
+        </dt>
+        <dd>Accumulate intermediate results of a vector reduction</dd>
+      </dl><dl><dt>
+
+          <code><a href="negate.html">negate()</a></code>
+
+        </dt>
+        <dd>Negate a predicate function so it selects what it previously rejected</dd>
       </dl><dl><dt>
 
           <code><a href="list_c.html">list_c()</a></code> <code><a href="list_c.html">list_rbind()</a></code> <code><a href="list_c.html">list_cbind()</a></code>
 
         </dt>
         <dd>Combine list elements into a single data structure</dd>
+      </dl><dl><dt>
+
+          <code><a href="flatten_list.html">list_flatten()</a></code>
+
+        </dt>
+        <dd>Flatten a list</dd>
+      </dl><dl><dt>
+
+          <code><a href="list_assign.html">list_assign()</a></code> <code><a href="list_assign.html">list_modify()</a></code> <code><a href="list_assign.html">list_merge()</a></code>
+
+        </dt>
+        <dd>Modify a list</dd>
       </dl><dl><dt>
 
           <code><a href="list_simplify.html">list_simplify()</a></code>
@@ -121,59 +219,22 @@
         <dd>Transpose a list</dd>
       </dl><dl><dt>
 
-          <code><a href="lmap.html">lmap()</a></code> <code><a href="lmap.html">lmap_if()</a></code> <code><a href="lmap.html">lmap_at()</a></code>
-
-        </dt>
-        <dd>Apply a function to list-elements of a list</dd>
-      </dl><dl><dt>
-
-          <code><a href="map.html">map()</a></code> <code><a href="map.html">walk()</a></code> <code><a href="map.html">map_lgl()</a></code> <code><a href="map.html">map_int()</a></code> <code><a href="map.html">map_dbl()</a></code> <code><a href="map.html">map_chr()</a></code> <code><a href="map.html">map_vec()</a></code>
-
-        </dt>
-        <dd>Apply a function to each element of a vector</dd>
-      </dl><dl><dt>
-
-          <code><a href="map2.html">map2()</a></code> <code><a href="map2.html">walk2()</a></code> <code><a href="map2.html">map2_lgl()</a></code> <code><a href="map2.html">map2_int()</a></code> <code><a href="map2.html">map2_dbl()</a></code> <code><a href="map2.html">map2_chr()</a></code> <code><a href="map2.html">map2_vec()</a></code> <code><a href="map2.html">imap()</a></code>
-
-        </dt>
-        <dd>Map over two inputs</dd>
-      </dl><dl><dt>
-
-          <code><a href="map_if.html">map_if()</a></code> <code><a href="map_if.html">map_at()</a></code>
-
-        </dt>
-        <dd>Apply a function to each element of a vector conditionally</dd>
-      </dl><dl><dt>
-
-          <code><a href="modify_in.html">modify_in()</a></code> <code><a href="modify_in.html">assign_in()</a></code>
-
-        </dt>
-        <dd>Modify a pluck location</dd>
-      </dl><dl><dt>
-
-          <code><a href="negate.html">negate()</a></code>
-
-        </dt>
-        <dd>Negate a predicate function so it selects what it previously rejected</dd>
-      </dl><dl><dt>
-
-          <code><a href="pluck.html">`pluck&lt;-`()</a></code> <code><a href="pluck.html">pluck()</a></code> <code><a href="pluck.html">pluck_exists()</a></code> <code><a href="pluck.html">pluck_depth()</a></code> <code><a href="pluck.html">ith()</a></code> <code><a href="pluck.html">ith_index()</a></code>
-
-        </dt>
-        <dd>Safely get or set an element deep within a nested data structure</dd>
-      </dl><dl><dt>
-
-          <code><a href="pmap.html">pmap()</a></code> <code><a href="pmap.html">pwalk()</a></code> <code><a href="pmap.html">pmap_lgl()</a></code> <code><a href="pmap.html">pmap_int()</a></code> <code><a href="pmap.html">pmap_dbl()</a></code> <code><a href="pmap.html">pmap_chr()</a></code> <code><a href="pmap.html">pmap_vec()</a></code>
-
-        </dt>
-        <dd>Map over multiple input simultaneously (in "parallel")</dd>
-      </dl><dl><dt>
-
           <code><a href="reduce.html">reduce()</a></code> <code><a href="reduce.html">reduce_right()</a></code>
 
         </dt>
         <dd>Reduce a list to a single value by iteratively applying a binary function</dd>
-      </dl><dl><dt>
+      </dl></div><div class="section level2">
+      <h2 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a></h2>
+
+      <div class="section-desc"><p>Various utilities.</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="utils-gh.html">gh_url_R()</a></code> <code><a href="utils-gh.html">gh_url_test()</a></code>
 
@@ -186,7 +247,8 @@
         </dt>
         <dd>Base replacement for string manipulation based on <a href="https://stringr.tidyverse.org/" class="external-link">stringr</a>.</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
