@@ -6,7 +6,10 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of poorrr is to …
+The goal of poorrr is to provide a minimal dependency grammar of
+funcitonal programming tools. It currently only depends on
+[rlang](https://rlang.r-lib.org/) only. It reproduces most of the
+funcionalities of [purrr](https://purrr.tidyverse.org/).
 
 ## Installation
 
@@ -14,8 +17,8 @@ You can install the development version of poorrr from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("pak")
-pak::pak("f-dallolio/poorrr")
+# install.packages("remotes")
+remotes::install.github("f-dallolio/poorrr")
 ```
 
 ## Example
